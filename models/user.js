@@ -3,18 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends sequelize.Sequelize.Model{}
   User.init({
     idRoom: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          args: true,
-          msg: 'ID Room is required'
-        },
-        notEmpty: {
-          args: true,
-          msg: 'ID Room is required'
-        }
-      }
+      type: DataTypes.INTEGER,
     },
     username: {
       type: DataTypes.STRING,
