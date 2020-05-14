@@ -7,12 +7,17 @@ function Authorization(req, res, next){
       if(idRoom === req.currentRoomUser){
         next()
       } else {
-        console.log("you are not in this room, enter roomId first")
-        // return next(err)
+        return next({
+          name : 'Unauthorized',
+          errors: [{message: "You are not in this room, enter roomId first"}]
+        })
       }
     })
     .catch(err => {
-      console.log("ada error authorization")
+      return next({
+        name : 'Internal Server Error',
+        errors: [{message: err}]
+      })
     })
 }
 
