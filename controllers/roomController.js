@@ -1,4 +1,5 @@
 const { Room } = require('../models')
+const { User } = require('../models')
 
 class RoomController {
     static create(req, res, next) {
@@ -31,6 +32,21 @@ class RoomController {
         })
         .catch(err => {
             return next(err)
+        })
+    }
+    static findOne(req, res, next){
+      const id = req.currentRoomUser
+      Room
+        .findByPk(id, {
+          include: User
+        })
+        .then(room => {
+          res.status(200).json({
+            Room: room
+          })
+        })
+        .catch(err => {
+          console.log(err)
         })
     }
 }

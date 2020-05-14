@@ -16,7 +16,6 @@ function Authentication (req, res, next) {
       .findByPk(id)
       .then(user => {
         if(user) {
-          //req.currentRoomUser = user.idRoom
           req.currentUser = user.id
           next()
         } else {

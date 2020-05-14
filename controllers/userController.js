@@ -7,21 +7,41 @@ class UserController{
         const payload = {
             username
         }
-        User.create(payload)
-        .then(result => {
-            let user = {
+        User
+          .findOne({
+            where : {
+              username
+            }
+          })
+          .then(result => {
+            if(result){
+              let user = {
                 id: result.id,
                 username: result.username
+              }
+              let token = generateToken(user)
+              return res.status(200).json({
+                  token,
+                  msg: 'Welcome to game'
+              })
+            } else {
+              return User.create(payload)
             }
-            let token = generateToken(user)
-            return res.status(201).json({
-                token,
-                msg: 'Welcome to game'
-            })
-        })
-        .catch(err => {
-            return next(err)
-        })
+          })
+          .then(result => {
+              let user = {
+                  id: result.id,
+                  username: result.username
+              }
+              let token = generateToken(user)
+              return res.status(201).json({
+                  token,
+                  msg: 'Welcome to game'
+              })
+          })
+          .catch(err => {
+              return next(err)
+          })
     }
 
     static getRoom(req, res, next) {

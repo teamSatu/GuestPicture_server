@@ -12,8 +12,21 @@ const io = require('socket.io')(server)
 const cors = require('cors')
 const errorHandling = require('./middlewares/errorHandling.js')
 
+let users = []
+
 io.on('connect', function(socket){
   console.log('User Connected')
+
+  socket.on('user-connect', (data) => {
+    users.push(data)
+    console.log(data, 'user has been conected')
+    io.emit('user-connect', users)
+  })
+
+  socket.on('user-logout', (data) => {
+    users = []
+    socket.emit('user-logout', users)
+  })
 })
 
 app.use(cors())
@@ -27,7 +40,7 @@ let image = ``
 
 io.on('connection', (socket) => {
     console.log(`a user connected`)
-    
+
     socket.on('sendPaintableData', (data) => {
         image = data
         io.emit('returnPaintableData', image)
