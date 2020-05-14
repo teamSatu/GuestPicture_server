@@ -31,7 +31,7 @@ class RoomController {
         })
         .catch(err => {
             return next(err)
-        }) 
+        })
     }
 }
 

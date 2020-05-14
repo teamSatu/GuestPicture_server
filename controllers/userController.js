@@ -63,12 +63,13 @@ class UserController{
         .update(payload, {
           where : {
             id
-          }
+          },
+          returning: true
         })
         .then(user => {
           return res.status(200).json({
                 msg: "You joining the room",
-                user: result.dataValues
+                user: user.dataValues
             })
         })
         .catch(err => {
