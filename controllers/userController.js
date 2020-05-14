@@ -11,11 +11,9 @@ class UserController{
         .then(result => {
             let user = {
                 id: result.id,
-                username: result.username,
-                idRoom: result.idRoom
+                username: result.username
             }
             let token = generateToken(user)
-            console.log(token);
             return res.status(201).json({
                 token,
                 msg: 'Welcome to game'
@@ -28,12 +26,13 @@ class UserController{
 
     static getRoom(req, res, next) {
         let id = req.currentUser
+        let newRoom = req.body.id
         User.findByPk(id)
         .then(User => {
             if(User){
-                let newRoom = req.currentRoomUser
                 let updateRoom = {
-                    idRoom: newRoom
+                    idRoom: newRoom,
+                    status: true
                 }
                 return User.update(updateRoom, {
                     where: {
@@ -45,12 +44,35 @@ class UserController{
         })
         .then(result => {
             return res.status(200).json({
-                msg: "You joining the room",
+                msg: "You Creating the room",
                 user: result.dataValues
             })
         })
         .catch(err => {
             return next(err)
+        })
+    }
+    static joinRoom(req, res, next){
+      const id = req.currentUser
+      const idRoom = req.currentRoomUser
+      const payload = {
+        idRoom,
+        status : false
+      }
+      User
+        .update(payload, {
+          where : {
+            id
+          }
+        })
+        .then(user => {
+          return res.status(200).json({
+                msg: "You joining the room",
+                user: result.dataValues
+            })
+        })
+        .catch(err => {
+          return next(err)
         })
     }
 
@@ -113,7 +135,7 @@ class UserController{
         })
         .catch(err => {
             return next(err)
-        }) 
+        })
     }
 }
 
