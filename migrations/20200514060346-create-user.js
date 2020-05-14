@@ -10,12 +10,15 @@ module.exports = {
       },
       idRoom: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Rooms",
-          key: "id"
+        references : {
+          model : "Rooms",
+          key : "id"
         },
-        onDelete: "cascade",
-        onUpdate: "cascade"
+        onDelete : "cascade",
+        onUpdate : "cascade"
+      },
+      answer : {
+        type : Sequelize.STRING
       },
       username: {
         type: Sequelize.STRING
@@ -23,11 +26,8 @@ module.exports = {
       score: {
         type: Sequelize.INTEGER
       },
-      answer: {
-        type: Sequelize.STRING
-      },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
