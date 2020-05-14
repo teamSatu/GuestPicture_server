@@ -1,4 +1,5 @@
 const { User } = require('../models')
+const { generateToken } = require('../helpers/jwt')
 
 class UserController{
     static login(req, res, next) {
@@ -8,12 +9,46 @@ class UserController{
         }
         User.create(payload)
         .then(result => {
-            let token = result.username
+            let user = {
+                id: result.id,
+                username: result.username
+            }
+            let token = generateToken(user)
+            console.log(token);
             return res.status(201).json({
-                access_token: token,
+                token,
                 msg: 'Welcome to game'
             })
+        })
+        .catch(err => {
+            console.log(err);
+            
+            return next(err)
+        })
+    }
 
+    static getRoom(req, res, next) {
+        let id = req.params.id
+        User.findByPk(id)
+        .then(User => {
+            if(User){
+                let newRoom = req.body.room
+                let updateRoom = {
+                    idRoom: newRoom
+                }
+                return User.update(updateRoom, {
+                    where: {
+                        id
+                    },
+                    returning: true
+                })
+            }
+        })
+        .then(result => {
+            return res.status(200).json({
+                msg: "You joining the room",
+                user: result.dataValues
+            })
         })
         .catch(err => {
             return next(err)
@@ -21,7 +56,7 @@ class UserController{
     }
 
     static showPlayer(req, res, next){
-        let idRoom = req.currentIdRoom
+        let idRoom = req.currentRoomUser
         User.findAll({
             where: {
                 idRoom
@@ -47,20 +82,18 @@ class UserController{
                 let updateScore = {
                     score: newScore
                 }
-                return Task.update(updateScore, {
+                return User.update(updateScore, {
                     where: {
                         id
                     },
                     returning: true
                 })
-                
             }
-            
         })
         .then(result => {
             return res.status(200).json({
                 msg: "You hit the right answer",
-                task: result[1]
+                user: result.dataValues
             })
         })
         .catch(err => {
@@ -71,7 +104,7 @@ class UserController{
     static deletePlayer(req, res, next){
         User.destroy({
             where: {
-                idRoom: req.currentIdRoom, 
+                idRoom : req.currentRoomUser
             }
         })
         .then(result => {
@@ -80,6 +113,7 @@ class UserController{
             })
         })
         .catch(err => {
+            console.log(err);
             return next(err)
         }) 
     }
