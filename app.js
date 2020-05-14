@@ -23,5 +23,16 @@ app.use(express.json())
 app.use(routes)
 app.use(errorHandling)
 
+let image = ``
+
+io.on('connection', (socket) => {
+    console.log(`a user connected`)
+    
+    socket.on('sendPaintableData', (data) => {
+        image = data
+        io.emit('returnPaintableData', image)
+    })
+})
+
 server.listen(PORT, ()=> console.log(`Listening on port ${PORT}`))
 
