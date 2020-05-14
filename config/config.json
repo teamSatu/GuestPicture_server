@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "trafalgar9",
+    "database": "db_guestPicture",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
