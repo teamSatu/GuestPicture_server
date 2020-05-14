@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     answer: DataTypes.STRING,
     status: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'User'
   })
   User.associate = function(models) {
     // associations can be defined here
