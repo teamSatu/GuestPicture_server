@@ -2,6 +2,7 @@ const {Room} = require('../models')
 
 function Authorization(req, res, next){
   const {name} = req.body
+  console.log(req.body)
   Room
     .findOne({
       where : {
@@ -9,7 +10,8 @@ function Authorization(req, res, next){
       }
     })
     .then(room => {
-      if(idRoom === req.currentRoomUser){
+      console.log(room)
+      if(room){
         next()
       } else {
         return next({
