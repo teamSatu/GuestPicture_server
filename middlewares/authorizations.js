@@ -1,15 +1,20 @@
 const {Room} = require('../models')
 
 function Authorization(req, res, next){
+  const {name} = req.body
   Room
-    .findByPk(id)
+    .findOne({
+      where : {
+        name
+      }
+    })
     .then(room => {
       if(idRoom === req.currentRoomUser){
         next()
       } else {
         return next({
           name : 'Unauthorized',
-          errors: [{message: "You are not in this room, enter roomId first"}]
+          errors: [{message: "There is no room exist with that name, please input a valid room name"}]
         })
       }
     })
