@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName : "Room"
   });
   Room.associate = function(models) {
-    Room.hasMany = (models.User)
+    Room.hasMany(models.User)
   };
   return Room;
 };

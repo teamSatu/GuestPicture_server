@@ -14,6 +14,18 @@ function errorHandler (err, req, res, next){
             errors: err.errors
         })
     }
+    else if(err.name == "Unauthorized" || err.name == "JsonWebTokenError" ){
+        return res.status(401).json({
+            type: "Unauthorized",
+            errors: err.errors
+        })
+    }
+    else if(err.name == "Not Found"){
+        return res.status(404).json({
+            type: "Not Found",
+            errors: err.errors
+        })
+    }
     else if(err.name == "Internal Server Error"){
         return res.status(500).json({
             type: "Internal Server Error",

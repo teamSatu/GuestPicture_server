@@ -11,7 +11,8 @@ class UserController{
         .then(result => {
             let user = {
                 id: result.id,
-                username: result.username
+                username: result.username,
+                idRoom: result.idRoom
             }
             let token = generateToken(user)
             console.log(token);
@@ -21,18 +22,16 @@ class UserController{
             })
         })
         .catch(err => {
-            console.log(err);
-            
             return next(err)
         })
     }
 
     static getRoom(req, res, next) {
-        let id = req.params.id
+        let id = req.currentUser
         User.findByPk(id)
         .then(User => {
             if(User){
-                let newRoom = req.body.room
+                let newRoom = req.currentRoomUser
                 let updateRoom = {
                     idRoom: newRoom
                 }
@@ -113,7 +112,6 @@ class UserController{
             })
         })
         .catch(err => {
-            console.log(err);
             return next(err)
         }) 
     }
