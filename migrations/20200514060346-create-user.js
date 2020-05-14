@@ -9,7 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idRoom: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Rooms",
+          key: "id"
+        },
+        onDelete: "cascade",
+        onUpdate: "cascade"
       },
       username: {
         type: Sequelize.STRING
