@@ -13,6 +13,7 @@ const cors = require('cors')
 const errorHandling = require('./middlewares/errorHandling.js')
 
 let users = []
+let scoreBoard = []
 
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
@@ -43,11 +44,26 @@ io.on('connection', (socket) => {
 
     socket.on('gameplay', (data) => {
       let timer = data
-      socket.emit('gameplay', timer)
+      io.emit('gameplay', timer)
     })
     socket.on('play', (data) => {
-      console.log(data)
-      socket.emit('play', data)
+      io.emit('play', data)
+    })
+    socket.on(`update-score`, (data) => {
+      let isIn = false
+      for(let i = 0; i < scoreBoard.length-1; i++){
+        if(scoreBoard[i].username === data.username) {
+          isIn = true
+          scoreBoard[i].score = scoreBoard[i].score + data.score
+        }
+      }
+      if(!isIn) {
+        scoreBoard.push(data)
+      }
+      io.emit('scoreBoard', scoreBoard)
+    })
+    socket.on('clear-scoreBoard', () => {
+      scoreBoard = []
     })
 })
 
