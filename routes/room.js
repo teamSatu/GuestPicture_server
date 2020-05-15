@@ -7,5 +7,8 @@ router.use(authentication)
 router.get('/', authorization, RoomController.findOne)
 router.post('/', RoomController.create)
 router.delete('/', authorization, RoomController.delete)
+router.get('/question', (req, res, next) => {
+  res.status(200).json(require('../resources.json'))
+})
 
 module.exports = router
