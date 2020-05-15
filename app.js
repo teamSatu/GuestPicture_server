@@ -14,21 +14,6 @@ const errorHandling = require('./middlewares/errorHandling.js')
 
 let users = []
 
-io.on('connect', function(socket){
-  console.log('User Connected')
-
-  socket.on('user-connect', (data) => {
-    users.push(data)
-    console.log(data, 'user has been conected')
-    io.emit('user-connect', users)
-  })
-
-  socket.on('user-logout', (data) => {
-    users = []
-    socket.emit('user-logout', users)
-  })
-})
-
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -44,6 +29,16 @@ io.on('connection', (socket) => {
     socket.on('sendPaintableData', (data) => {
         image = data
         io.emit('returnPaintableData', image)
+    })
+    socket.on('user-connect', (data) => {
+      users.push(data)
+      console.log(data, 'user has been conected')
+      io.emit('user-connect', users)
+    })
+
+    socket.on('user-logout', (data) => {
+      users = []
+      socket.emit('user-logout', users)
     })
 })
 
