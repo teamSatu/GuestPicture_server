@@ -40,6 +40,15 @@ io.on('connection', (socket) => {
       users = []
       socket.emit('user-logout', users)
     })
+
+    socket.on('gameplay', (data) => {
+      let timer = data
+      socket.emit('gameplay', timer)
+    })
+    socket.on('play', (data) => {
+      console.log(data)
+      socket.emit('play', data)
+    })
 })
 
 server.listen(PORT, ()=> console.log(`Listening on port ${PORT}`))
